@@ -34,22 +34,13 @@ import { Actor, checkEnvFile, printBalance, sleep, startClient } from "./lib";
 async function executeWorkflow(taker: Actor) {
     await printBalance(taker, "taker");
 
-    // Wait for commandline input for demo purposes
-    // readLineSync.question("1. Ready to accept and order from the maker?");
     console.log("1. Ready to accept and order from the maker");
 
-    // Initialize the taker negotiator that defines the negotiation phase of the trade.
-    // The taker negotiator manages retrieving orders from the maker and deciding if they are acceptable for the taker.
-    // Once an order was taken by a taker the negotiator hands over the order and execution parameters to the
-    // execution phase.
     const takerNegotiator = new TakerNegotiator(taker.comitClient);
     const makerClient = new MakerClient("http://localhost:2318/");
 
-    // Decide if an order is acceptable for the taker and take it.
     const isOrderAcceptable = (order: Order) => {
-        // Check if the returned order matches the requested asset-pair
         if (order.ask.asset !== "ether" || order.bid.asset !== "bitcoin") {
-            // These aren't the droids you're looking for
             return false;
         }
 
@@ -60,7 +51,6 @@ async function executeWorkflow(taker: Actor) {
             // Let's do safe maths
             return false;
         }
-        // Only accept orders that are at least 1 bitcoin for 10 Ether
         const minRate = 0.001;
         const orderRate = bitcoin / ether;
         console.log("Rate offered: ", orderRate);
@@ -68,7 +58,6 @@ async function executeWorkflow(taker: Actor) {
     };
     const { order, swap } = await takerNegotiator.negotiateAndInitiateSwap(
         makerClient,
-        // Define the trading pair to request and order for.
         "ETH-BTC",
         isOrderAcceptable
     );
@@ -97,23 +86,17 @@ async function executeWorkflow(taker: Actor) {
         swapParameters.beta_asset.name
     );
 
-    // Wait for commandline input for demo purposes
-    // readLineSync.question("2. Continue funding the Ethereum HTLC?");
     console.log("2. Continuing funding the Ethereum HTLC");
 
     // Define how often and how long the comit-js-sdk should try to execute the fund and redeem action.
+    // For the purpose of testnet we set this to 40 minutes...
     const tryParams: TryParams = {
         maxTimeoutSecs: 40 * 60,
         tryIntervalSecs: 1,
     };
 
-    console.log(
-        "Ethereum HTLC funded! TXID: ",
+    console.log("Ethereum HTLC funded! TXID: ", await swap.fund(tryParams));
 
-        await swap.fund(tryParams)
-    );
-
-    // readLineSync.question("4. Continue redeeming the Bitcoin HTLC?");
     console.log("4. Continuing redeeming the Bitcoin HTLC");
 
     const transactionId = await swap.redeem(tryParams);
@@ -123,7 +106,6 @@ async function executeWorkflow(taker: Actor) {
 
     await sleep(3 * 60 * 1000);
 
-    // print balances after swapping
     await printBalance(taker, "taker");
 
     process.exit();

@@ -49,10 +49,7 @@ export interface Actor {
 
 export function checkEnvFile(path: string) {
     if (!fs.existsSync(path)) {
-        console.log(
-            "Could not find %s file. Did you run \\`create-comit-app start-env\\`?",
-            path
-        );
+        console.log("Could not find %s file.", path);
         process.exit(1);
     }
 }

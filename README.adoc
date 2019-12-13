@@ -1,5 +1,9 @@
 = Testnet Demo
 
+IMPORTANT:
+The latest sdk has not been released, hence use this sdk version and link locally:
+https://github.com/comit-network/comit-js-sdk/tree/inmeory-btc-wallet
+
 == Intro
 
 Synced testnet nodes are a requirement for running the COMIT Node Daemon (cnd) against testnet. 
@@ -99,3 +103,20 @@ https://testnet-faucet.mempool.co/
 . Start the taker: +
 . The swap should happen completely automated (note: this may take a while given testnets are not reliable)
 
+== Appendix
+
+=== CoBloX Testnet Node Status
+
+==== Ethereum
+```
+curl -X POST --data '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}' -H "Content-type:application/json" bobtimus.coblox.tech:8545 | jq .
+```
+
+Returns the syncing status.
+
+==== Bitcoin
+```
+curl bobtimus.coblox.tech:18332/rest/chaininfo.json |  jq .
+```
+
+Returns basic chain status information.

@@ -21,19 +21,11 @@ In a more real world scenario maker and taker would of course be separate people
 
 Create a config file for the taker in `taker/config.toml` with the following content:
 
-[source,toml]
-.taker.toml
-----
-include::taker/config.toml_example[]
-----
+link:taker/config.toml_example[taker/config.toml_example]
 
 Create a seed file for the taker in `taker/seed.pem`:
 
-[source,pem]
-.seed.pem
-----
-include::taker/seed.pem[]
-----
+link:taker/seed.pem[taker/seed.pem]
 
 We assume that cnd is in your path. For how to do so have a look at: https://github.com/comit-network/comit-rs/readme.md
 
@@ -46,20 +38,11 @@ cnd --config config.toml
 === Run cnd maker
 Create a config file for the maker in `maker/config.toml` with the following content:
 
-[source,toml]
-.taker.toml
-----
-include::maker/config.toml_example[]
-----
-
+link:maker/config.toml_example[maker/config.toml_example]
 
 Create a seed file for the maker in `maker/seed.pem`:
 
-[source,pem]
-.seed.pem
-----
-include::maker/seed.pem[]
-----
+link:maker/seed.pem[maker/seed.pem]
 
 We assume that cnd is in your path. For how to do so have a look at: https://github.com/comit-network/comit-rs/readme.md
 Startup command:
@@ -68,7 +51,6 @@ Startup command:
 ----
 cnd --config config.toml
 ----
-
 
 
 === Key/account generation and funding for both wallets

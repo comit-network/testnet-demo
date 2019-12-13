@@ -101,7 +101,8 @@ https://testnet-faucet.mempool.co/
 . Start the maker: +
 `yarn run maker`
 . Start the taker: +
-. The swap should happen completely automated (note: this may take a while given testnets are not reliable)
+. The wallets will sync at the beginning which takes a while depending on your internet connection and computer.
+The swap should happen completely automated (note: this may take a while given testnets are not reliable).
 
 == Appendix
 

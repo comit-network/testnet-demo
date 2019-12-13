@@ -1,0 +1,7 @@
+BITCOIN_HD_KEY_TAKER=FILL_ME_OUT
+ETHEREUM_KEY_TAKER=FILL_ME_OUT
+
+HTTP_URL_CND_TAKER=http://localhost:8000
+
+BITCOIN_P2P_URI=your.bitcoin.testnet.node:18332
+ETHEREUM_NODE_HTTP_URL=your.ethereum.testnet.node:8545

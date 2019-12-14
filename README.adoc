@@ -1,9 +1,5 @@
 = Testnet Demo
 
-IMPORTANT:
-The latest sdk has not been released, hence use this sdk version and link locally:
-https://github.com/comit-network/comit-js-sdk/tree/inmeory-btc-wallet
-
 == Intro
 
 Synced testnet nodes are a requirement for running the COMIT Node Daemon (cnd) against testnet. 

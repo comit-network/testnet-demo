@@ -6,7 +6,7 @@ Synced testnet nodes are a requirement for running the COMIT Node Daemon (cnd) a
 In order to make your life easier we provide fully synced testnet nodes for your cnd here:
 
 Note that our testnet nodes might not always be running, but are just started before workshops/events.
-If you have any questions please contact us through the [COMIT community chat on gitter](https://gitter.im/comit-network/community).
+If you have any questions please contact us through the https://gitter.im/comit-network/community[COMIT community chat on gitter].
 
 This guide assumes that you run both the taker and the maker on the same machine (for the example's sake).
 In a more real world scenario maker and taker would of course be separate people on separate machines.

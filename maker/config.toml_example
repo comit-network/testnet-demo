@@ -15,5 +15,9 @@ port = 18000
 [http_api.cors]
 allowed_origins = "all"
 
-[Data]
+[data]
 dir = "/path/to/this/folder"
+
+[logging]
+level = "INFO"
+structured = false

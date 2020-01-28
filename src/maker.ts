@@ -20,16 +20,7 @@ import { sleep } from "./lib";
         `Fund me with ETH please: ${await maker.ethereumWallet.getAccount()}`
     );
 
-    const walletDb = wallet.getWalletDB();
-    const spvNode = wallet.getNode();
-    let progress = await spvNode.chain.getProgress();
-
-    while (progress < 1) {
-        const walletState = await walletDb.getState();
-        console.log(`Bitcoin wallet still syncing... current height is: ${JSON.stringify(walletState.height)} of ${JSON.stringify(spvNode.chain.tip.height)}`);
-        await sleep(60000);
-        progress = await spvNode.chain.getProgress();
-    }
+    await wallet.showProgressBar();
 
     const rl = readline.createInterface({
         input: process.stdin,

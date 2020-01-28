@@ -246,3 +246,6 @@ taker/cnd.sqlite
 taker/cnd.log
 taker/config.toml
 env
+
+
+cnd/cnd

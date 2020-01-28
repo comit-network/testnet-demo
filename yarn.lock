@@ -543,9 +543,10 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-"comit-sdk@https://github.com/comit-network/comit-js-sdk#inmeory-btc-wallet":
-  version "0.8.0"
-  resolved "https://github.com/comit-network/comit-js-sdk#68cadbf8e702095eea252a0058b36e05d4426aa2"
+comit-sdk@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/comit-sdk/-/comit-sdk-0.9.1.tgz#46cdfc8abe3c3b132cb91b1a688beee2ece1ce2e"
+  integrity sha512-RvecE3FFmiKGVXoUTXF0QIm56GIRXn9DlnS2SmI0kcsz/f0nhrPr5nQgdIt9juaGzNoCMMTqJgZmy4ATscMWDg==
   dependencies:
     axios "^0.19.0"
     bcoin "https://github.com/bcoin-org/bcoin#2496acc7a98a43f00a7b5728eb256877c1bbf001"

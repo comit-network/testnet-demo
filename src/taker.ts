@@ -1,4 +1,4 @@
-import { MakerClient, Order, TakerNegotiator, TryParams } from "comit-sdk";
+import { MakerClient, TakerNegotiator, TryParams } from "comit-sdk";
 import { formatEther } from "ethers/utils";
 import * as readline from "readline";
 import { toBitcoin } from "satoshi-bitcoin-ts";
@@ -36,31 +36,34 @@ async function executeWorkflow(taker: Actor) {
 
     console.log("1. Ready to accept and order from the maker");
 
-    const takerNegotiator = new TakerNegotiator(taker.comitClient);
     const makerClient = new MakerClient("http://localhost:2318/");
+    const takerNegotiator = new TakerNegotiator(taker.comitClient, makerClient);
 
-    const isOrderAcceptable = (order: Order) => {
-        if (order.ask.asset !== "ether" || order.bid.asset !== "bitcoin") {
-            return false;
-        }
+    const order = await takerNegotiator.getOrderByTradingPair("ETH-BTC");
 
-        const ether = parseFloat(order.ask.nominalAmount);
-        const bitcoin = parseFloat(order.bid.nominalAmount);
+    if (order.ask.asset !== "ether" || order.bid.asset !== "bitcoin") {
+        throw new Error("Maker returned an order with incorrect assets.");
+    }
 
-        if (ether === 0 || bitcoin === 0) {
-            // Let's do safe maths
-            return false;
-        }
-        const minRate = 0.001;
-        const orderRate = bitcoin / ether;
-        console.log("Rate offered: ", orderRate);
-        return orderRate > minRate;
-    };
-    const { order, swap } = await takerNegotiator.negotiateAndInitiateSwap(
-        makerClient,
-        "ETH-BTC",
-        isOrderAcceptable
-    );
+    const ether = parseFloat(order.ask.nominalAmount);
+    const bitcoin = parseFloat(order.bid.nominalAmount);
+
+    if (ether === 0 || bitcoin === 0) {
+        // Let's do safe maths
+        throw new Error("Maker returned an order with a null assets.");
+    }
+
+    // Only accept orders that are at least 1 bitcoin for 10 Ether
+    const minRate = 0.001;
+    const orderRate = bitcoin / ether;
+    console.log("Rate offered: ", orderRate);
+    if (orderRate < minRate) {
+        throw new Error(
+            "Maker returned an order which is not good enough, aborting."
+        );
+    }
+
+    const swap = (await takerNegotiator.takeOrder(order))!;
 
     if (!swap) {
         throw new Error("Could not find an order or something else went wrong");

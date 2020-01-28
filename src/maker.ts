@@ -99,7 +99,6 @@ async function executeWorkflow(maker: Actor) {
         swapParams.beta_asset.name
     );
 
-    // readLineSync.question("3. Continue funding the Bitcoin HTLC?");
     console.log("3. Continuing funding the Bitcoin HTLC");
 
     const tryParams: TryParams = {
@@ -112,14 +111,9 @@ async function executeWorkflow(maker: Actor) {
         await swapHandle.fund(tryParams)
     );
 
-    // readLineSync.question("5. Continue redeeming the Ethereum HTLC?");
     console.log("5. Continuing redeeming the Ethereum HTLC");
 
-    console.log(
-        "Ether redeemed! TXID: ",
-
-        await swapHandle.redeem(tryParams)
-    );
+    console.log("Ether redeemed! TXID: ", await swapHandle.redeem(tryParams));
 
     console.log("Swapped!");
 

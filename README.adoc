@@ -76,6 +76,7 @@ https://testnet-faucet.mempool.co/
 . Both maker and taker cnd are running,
 . `env` files were properly initialized with the bitcoin HD keys and Ethereum private keys
 . Bitcoin addresses and Ethereum accounts were properly funded.
+. Dependencies were installed through running `yarn install`
 . Start the maker: +
 `yarn run maker`
 . Start the taker: +
@@ -99,3 +100,10 @@ curl bobtimus.coblox.tech:18332/rest/chaininfo.json |  jq .
 ```
 
 Returns basic chain status information.
+
+=== Known issues
+
+If you run into an error on `yarn install`ing the dependencies you can try:
+
+1. Delete your `yarn.lock` file
+2. run `yarn cache clean`

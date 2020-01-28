@@ -3,6 +3,7 @@ import { formatEther } from "ethers/utils";
 import moment from "moment";
 import * as readline from "readline";
 import { toBitcoin } from "satoshi-bitcoin-ts";
+import {TestnetBitcoinWallet} from "./bcoinWallet";
 import { Actor, checkEnvFile, printBalance, startClient } from "./lib";
 import { sleep } from "./lib";
 
@@ -11,17 +12,30 @@ import { sleep } from "./lib";
 
     const maker = await startClient("MAKER", 0);
 
+    const wallet = maker.bitcoinWallet as TestnetBitcoinWallet;
     console.log(
-        `Fund me with BTC please: ${await maker.bitcoinWallet.getAddress()}`
+        `Fund me with BTC please: ${await wallet.getAddress()}`
     );
     console.log(
         `Fund me with ETH please: ${await maker.ethereumWallet.getAccount()}`
     );
 
+    const walletDb = wallet.getWalletDB();
+    const spvNode = wallet.getNode();
+    let progress = await spvNode.chain.getProgress();
+
+    while (progress < 1) {
+        const walletState = await walletDb.getState();
+        console.log(`Bitcoin wallet still syncing... current height is: ${JSON.stringify(walletState.height)} of ${JSON.stringify(spvNode.chain.tip.height)}`);
+        await sleep(60000);
+        progress = await spvNode.chain.getProgress();
+    }
+
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
+
     await printBalance(maker, "maker");
     rl.question(
         "Continue? (note, if you only funded just now, you might need to wait until the wallet has synced)",

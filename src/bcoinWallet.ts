@@ -172,6 +172,14 @@ export class TestnetBitcoinWallet implements BitcoinWallet {
         return "150";
     }
 
+    public getWalletDB() {
+        return this.walletdb;
+    }
+
+    public getNode() {
+        return this.node;
+    }
+
     private assertNetwork(network: string) {
         if (network !== this.network.type) {
             throw new Error(

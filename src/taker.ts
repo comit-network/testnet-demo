@@ -2,6 +2,7 @@ import { MakerClient, TakerNegotiator, TryParams } from "comit-sdk";
 import { formatEther } from "ethers/utils";
 import * as readline from "readline";
 import { toBitcoin } from "satoshi-bitcoin-ts";
+import {TestnetBitcoinWallet} from "./bcoinWallet";
 import { Actor, checkEnvFile, printBalance, sleep, startClient } from "./lib";
 
 (async function main() {
@@ -10,12 +11,25 @@ import { Actor, checkEnvFile, printBalance, sleep, startClient } from "./lib";
     console.log("starting client...");
     const taker = await startClient("TAKER", 4);
 
+    const wallet = taker.bitcoinWallet as TestnetBitcoinWallet;
+
     console.log(
         `Fund me with BTC please: ${await taker.bitcoinWallet.getAddress()}`
     );
     console.log(
         `Fund me with ETH please: ${await taker.ethereumWallet.getAccount()}`
     );
+
+    const walletDb = wallet.getWalletDB();
+    const spvNode = wallet.getNode();
+    let progress = await spvNode.chain.getProgress();
+
+    while (progress < 1) {
+        const walletState = await walletDb.getState();
+        console.log(`Bitcoin wallet still syncing... current height is: ${JSON.stringify(walletState.height)} of ${JSON.stringify(spvNode.chain.tip.height)}`);
+        await sleep(60000);
+        progress = await spvNode.chain.getProgress();
+    }
 
     const rl = readline.createInterface({
         input: process.stdin,

@@ -1,4 +1,4 @@
-import { MakerHttpApi, MakerNegotiator, Order, TryParams } from "comit-sdk";
+import { MakerNegotiator, Order, TryParams } from "comit-sdk";
 import { formatEther } from "ethers/utils";
 import moment from "moment";
 import * as readline from "readline";
@@ -57,8 +57,7 @@ async function executeWorkflow(maker: Actor) {
         { maxTimeoutSecs: 1000, tryIntervalSecs: 0.1 }
     );
 
-    const makerHttpApi = new MakerHttpApi(makerNegotiator);
-    makerHttpApi.listen(2318);
+    await makerNegotiator.listen(2318, "localhost");
     const order: Order = {
         id: "123",
         tradingPair: "ETH-BTC",

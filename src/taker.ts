@@ -1,4 +1,4 @@
-import { MakerClient, TakerNegotiator, TryParams } from "comit-sdk";
+import { TakerNegotiator, TryParams } from "comit-sdk";
 import { formatEther } from "ethers/utils";
 import * as readline from "readline";
 import { toBitcoin } from "satoshi-bitcoin-ts";
@@ -41,8 +41,7 @@ async function executeWorkflow(taker: Actor) {
 
     console.log("1. Ready to accept and order from the maker");
 
-    const makerClient = new MakerClient("http://localhost:2318/");
-    const takerNegotiator = new TakerNegotiator(taker.comitClient, makerClient);
+    const takerNegotiator = new TakerNegotiator(taker.comitClient, "http://localhost:2318/");
 
     const order = await takerNegotiator.getOrderByTradingPair("ETH-BTC");
 

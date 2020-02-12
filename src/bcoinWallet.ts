@@ -190,7 +190,7 @@ export class TestnetBitcoinWallet implements BitcoinWallet {
         });
 
         while (progress < 1) {
-            await sleep(30000);
+            await sleep(3000);
             progress = await this.node.chain.getProgress();
             walletState = await this.walletdb.getState();
             b1.update(progress * 100, {

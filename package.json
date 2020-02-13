@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "check": "tsc && tslint -p . && prettier --check '**/*.{ts,json,yml}'",
+        "maker-cnd": "./cnd/cnd --config ./maker/config.toml",
         "maker": "DOTENV_CONFIG_PATH=./maker/env ts-node -r dotenv/config ./src/maker.ts",
+        "taker-cnd": "./cnd/cnd --config ./taker/config.toml",
         "taker": "DOTENV_CONFIG_PATH=./taker/env ts-node -r dotenv/config ./src/taker.ts",
         "fix": "tslint -p . --fix && prettier --write '**/*.{ts,js,json,yml}'"
     },
@@ -21,11 +23,13 @@
         "typescript": "^3.7.2"
     },
     "dependencies": {
+        "@types/cli-progress": "^3.4.1",
         "@types/express": "^4.17.2",
         "axios": "^0.19.0",
         "bcoin": "https://github.com/bcoin-org/bcoin#2496acc7a98a43f00a7b5728eb256877c1bbf001",
         "blgr": "^0.1.7",
-        "comit-sdk": "https://github.com/comit-network/comit-js-sdk#inmeory-btc-wallet",
+        "cli-progress": "^3.6.0",
+        "comit-sdk": "^0.10.1",
         "dotenv": "^8.1.0",
         "express": "^4.17.1",
         "moment": "^2.24.0",

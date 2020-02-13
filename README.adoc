@@ -81,21 +81,3 @@ https://testnet-faucet.mempool.co/
 . Start the taker: +
 . The wallets will sync at the beginning which takes a while depending on your internet connection and computer.
 The swap should happen completely automated (note: this may take a while given testnets are not reliable).
-
-== Appendix
-
-=== CoBloX Testnet Node Status
-
-==== Ethereum
-```
-curl -X POST --data '{"jsonrpc":"2.0","method":"eth_syncing","params":[],"id":1}' -H "Content-type:application/json" bobtimus.coblox.tech:8545 | jq .
-```
-
-Returns the syncing status.
-
-==== Bitcoin
-```
-curl bobtimus.coblox.tech:18332/rest/chaininfo.json |  jq .
-```
-
-Returns basic chain status information.

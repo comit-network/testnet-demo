@@ -1,7 +1,9 @@
 import { Amount, Network, Pool, SPVNode, TX } from "bcoin";
 import * as bcoin from "bcoin";
 import Logger from "blgr";
+import * as cliProgress from "cli-progress";
 import { BitcoinWallet } from "comit-sdk";
+import {sleep} from "./lib";
 
 export class TestnetBitcoinWallet implements BitcoinWallet {
     public static async newInstance(
@@ -170,6 +172,34 @@ export class TestnetBitcoinWallet implements BitcoinWallet {
     public getFee() {
         // should be dynamic in a real application
         return "150";
+    }
+
+    public async showProgressBar() {
+        let progress = await this.node.chain.getProgress();
+        let walletState = await this.walletdb.getState();
+        const b1 = new cliProgress.SingleBar({
+            format: 'CLI Progress |' + '{bar}' + '| {percentage}% || {value}/{total} Chunks || Known Height: {wallet}/{height}',
+            barCompleteChar: '\u2588',
+            barIncompleteChar: '\u2591',
+            hideCursor: true
+        });
+
+        b1.start(100, progress * 100, {
+            wallet: walletState.height,
+            height: this.node.chain.height,
+        });
+
+        while (progress < 1) {
+            await sleep(3000);
+            progress = await this.node.chain.getProgress();
+            walletState = await this.walletdb.getState();
+            b1.update(progress * 100, {
+                wallet: walletState.height,
+                height: this.node.chain.height,
+            });
+        }
+        // stop the bar
+        b1.stop();
     }
 
     private assertNetwork(network: string) {

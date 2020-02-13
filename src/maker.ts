@@ -1,8 +1,9 @@
-import { MakerHttpApi, MakerNegotiator, Order, TryParams } from "comit-sdk";
+import { MakerNegotiator, Order, TryParams } from "comit-sdk";
 import { formatEther } from "ethers/utils";
 import moment from "moment";
 import * as readline from "readline";
 import { toBitcoin } from "satoshi-bitcoin-ts";
+import {TestnetBitcoinWallet} from "./bcoinWallet";
 import { Actor, checkEnvFile, printBalance, startClient } from "./lib";
 import { sleep } from "./lib";
 
@@ -11,17 +12,21 @@ import { sleep } from "./lib";
 
     const maker = await startClient("MAKER", 0);
 
+    const wallet = maker.bitcoinWallet as TestnetBitcoinWallet;
     console.log(
-        `Fund me with BTC please: ${await maker.bitcoinWallet.getAddress()}`
+        `Fund me with BTC please: ${await wallet.getAddress()}`
     );
     console.log(
         `Fund me with ETH please: ${await maker.ethereumWallet.getAccount()}`
     );
 
+    await wallet.showProgressBar();
+
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout,
     });
+
     await printBalance(maker, "maker");
     rl.question(
         "Continue? (note, if you only funded just now, you might need to wait until the wallet has synced)",
@@ -52,8 +57,7 @@ async function executeWorkflow(maker: Actor) {
         { maxTimeoutSecs: 1000, tryIntervalSecs: 0.1 }
     );
 
-    const makerHttpApi = new MakerHttpApi(makerNegotiator);
-    makerHttpApi.listen(2318);
+    await makerNegotiator.listen(2318, "localhost");
     const order: Order = {
         id: "123",
         tradingPair: "ETH-BTC",
@@ -99,7 +103,6 @@ async function executeWorkflow(maker: Actor) {
         swapParams.beta_asset.name
     );
 
-    // readLineSync.question("3. Continue funding the Bitcoin HTLC?");
     console.log("3. Continuing funding the Bitcoin HTLC");
 
     const tryParams: TryParams = {
@@ -112,14 +115,9 @@ async function executeWorkflow(maker: Actor) {
         await swapHandle.fund(tryParams)
     );
 
-    // readLineSync.question("5. Continue redeeming the Ethereum HTLC?");
     console.log("5. Continuing redeeming the Ethereum HTLC");
 
-    console.log(
-        "Ether redeemed! TXID: ",
-
-        await swapHandle.redeem(tryParams)
-    );
+    console.log("Ether redeemed! TXID: ", await swapHandle.redeem(tryParams));
 
     console.log("Swapped!");
 
